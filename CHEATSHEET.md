@@ -13,6 +13,11 @@
 | `<leader><leader>r` | Normal | Reload Neovim configuration |
 | `<Esc>`             | Normal | Write file                  |
 
+    vim.keymap.set("n", "<leader>vm", media_picker, { desc = "Neovim Media Picker" })
+    vim.keymap.set("n", "<leader>rr", toggle_record, { desc = "Toggle Recording" })
+    vim.keymap.set("n", "<leader>rs", screenshot_neovim, { desc = "Screenshot Neovim" })
+    vim.keymap.set("n", "<leader>vr", toggle_media, { desc = "Toggle Record/Screenshot/Stop" })
+
 ## Window Navigation
 
 | Keybind | Mode   | Description           |
