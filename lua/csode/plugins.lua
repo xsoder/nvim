@@ -71,13 +71,6 @@ return packer.startup(function(use)
 			require("csode.plugin_config.luasnip")
 		end,
 	})
-	use({
-		"lukas-reineke/headlines.nvim",
-		requires = "nvim-treesitter/nvim-treesitter",
-		config = function()
-			require("headlines").setup()
-		end,
-	})
 
 	use("nvim-lua/plenary.nvim")
 	use("nvim-lua/popup.nvim")
