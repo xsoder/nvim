@@ -1,4 +1,6 @@
 # Neovim
+Generate a dialogue of Newton if he were the actual lover of Juliet instead of Romeo, and their love is sealed by eating mayonnaise together while swimming in a pool of mustaches. And he was a nerd with glasses and uses arch linux and they have a wedding cake made of mayonnaise made of anime waifu
+
 ## Neovim Configuration
 
 My personal Neovim configuration focused on development workflow.
