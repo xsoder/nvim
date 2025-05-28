@@ -1,6 +1,5 @@
-# 🚀 Neovim Configuration Wiki
+# 🚀 Neovim Setup
 
-<!-- Add your custom logo here -->
 <div align="center">
   <img src="./logo.png" alt="Neovim Config Logo" width="200"/>
   <h3>A Modern, Feature-Rich Neovim Development Environment</h3>
