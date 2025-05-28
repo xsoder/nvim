@@ -76,6 +76,9 @@ vim.keymap.set("n", "<leader>td", function()
     vim.cmd("Td")
 end, { noremap = true, silent = true, desc = "Todo" })
 
+vim.keymap.set("n", "<leader>mm", function()
+    vim.cmd("FollowMarkdownLink")
+end, { noremap = true, silent = true, desc = "Todo" })
 -- Keybind to show all custom keymaps
 vim.keymap.set("n", "<leader>?", function()
     require("telescope.builtin").keymaps({
