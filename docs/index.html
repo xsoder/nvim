@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Neovim Setup - A Modern, Feature-Rich Development Environment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Customizing Tailwind's default theme to match Tokyo Night Moon colors */
+        :root {
+            --color-background: #222436;
+            --color-text: #c8d3f5;
+            --color-primary: #82aaff; /* H1, labels */
+            --color-secondary: #ffc777; /* H2 */
+            --color-tertiary: #c3e88d; /* H3, strings */
+            --color-quaternary: #4fd6be; /* H4, links, properties */
+            --color-accent-orange: #ff966c; /* Punctuation, list markers, constants */
+            --color-accent-purple: #c099ff; /* Constructors, statements, function keywords */
+            --color-accent-blue: #89ddff; /* Operators, delimiters, special */
+            --color-comment: #636da6; /* Comments */
+            --color-code-bg: #30334a; /* Slightly lighter background for code blocks */
+            --color-code-text: #e0e8ff; /* Lighter text for better contrast in code blocks */
+            --color-keyword-italic: #fca7ea; /* Italic keywords */
+            --color-variable: #c8d3f5; /* Variables */
+            --color-preproc: #86e1fc; /* Preprocessor directives */
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom styles for code blocks to mimic original syntax highlighting */
+        pre {
+            background-color: var(--color-code-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            color: var(--color-code-text); /* Apply new text color */
+        }
+
+        code {
+            font-family: 'monospace', monospace;
+            color: var(--color-code-text); /* Ensure inline code also uses new text color */
+        }
+
+        /* Specific highlighting for code snippets */
+        pre .comment { color: var(--color-comment); font-style: italic; }
+        pre .function { color: var(--color-primary); }
+        pre .variable-parameter { color: var(--color-secondary); }
+        pre .string { color: var(--color-tertiary); }
+        pre .keyword { color: var(--color-keyword-italic); font-style: italic; }
+        pre .operator { color: var(--color-accent-blue); }
+        pre .punctuation-delimiter { color: var(--color-accent-blue); }
+        pre .preproc { color: var(--color-preproc); }
+        pre .label { color: var(--color-primary); }
+        pre .special { color: var(--color-accent-blue); }
+        pre .statement { color: var(--color-accent-purple); }
+        pre .property { color: var(--color-quaternary); }
+        pre .variable-member { color: var(--color-quaternary); }
+        pre .constant { color: var(--color-accent-orange); }
+
+        /* Markdown specific elements from original CSS */
+        .markdown-heading-1 { color: var(--color-primary); font-weight: bold; }
+        .markdown-heading-2 { color: var(--color-secondary); font-weight: bold; }
+        .markdown-heading-3 { color: var(--color-tertiary); font-weight: bold; }
+        .markdown-heading-4 { color: var(--color-quaternary); font-weight: bold; }
+        .markdown-list { font-weight: bold; color: var(--color-accent-orange); }
+        .markdown-strong { font-weight: bold; }
+        .markdown-link { color: var(--color-quaternary); }
+        .markdown-raw-inline { background-color: var(--color-code-bg); color: var(--color-code-text); padding: 0.1rem 0.3rem; border-radius: 0.25rem; }
+        .markdown-punctuation-special { color: var(--color-accent-orange); } /* For --- */
+        .markdown-title { color: var(--color-primary); font-weight: bold; } /* For the h3 title */
+        .markdown-spell { /* No specific color, just to identify original spell class */ }
+        .markdown-underline { text-decoration-line: underline; }
+
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+    <div class="flex flex-col lg:flex-row w-full max-w-6xl px-4 sm:px-6 lg:px-0">
+
+        <nav class="w-full lg:w-64 bg-gray-900 text-text p-6 shadow-lg lg:sticky lg:top-8 lg:h-[calc(100vh-4rem)] flex flex-col items-center lg:items-start mt-8 lg:mt-8 rounded-lg border border-gray-700">
+            <div class="flex flex-wrap lg:flex-col justify-center lg:justify-start gap-x-6 gap-y-2 text-lg font-semibold w-full">
+                <a href="#overview" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Overview</a>
+                <a href="#features" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Features</a>
+                <a href="#prerequisites" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Prerequisites</a>
+                <a href="#installation" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Installation</a>
+                <a href="#configuration-structure" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Config Structure</a>
+                <a href="#keybindings-reference" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Keybindings</a>
+                <a href="#plugin-ecosystem" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Plugin Ecosystem</a>
+                <a href="#custom-plugins" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Custom Plugins</a>
+                <a href="#customization-guide" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Customization Guide</a>
+                <a href="#troubleshooting" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Troubleshooting</a>
+                <a href="#advanced-usage" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Advanced Usage</a>
+                <a href="#contributing" class="hover:text-primary transition-colors duration-200 p-2 rounded-md hover:bg-gray-700 w-full text-center lg:text-left">Contributing</a>
+            </div>
+        </nav>
+
+        <div class="flex-grow w-full bg-gray-800 p-6 sm:p-8 lg:p-10 rounded-lg shadow-lg mt-8 mb-8 lg:ml-8">
+            <header class="text-center mb-10">
+                <div class="flex flex-col items-center justify-center mb-6">
+                    <img src="logo.png" alt="Neovim Config Logo" class="w-40 h-40 mb-4 shadow-md rounded-lg">
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-primary mb-2 markdown-heading-1">
+                        🚀 Neovim Setup
+                    </h1>
+                    <h3 class="text-xl sm:text-2xl font-semibold text-secondary markdown-title">
+                        A Modern, Feature-Rich Neovim Development Environment
+                    </h3>
+                </div>
+                <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+            </header>
+
+            <main>
+                <section id="overview" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🎯 Overview
+                    </h2>
+                    <p class="text-lg leading-relaxed mb-6 markdown-spell">
+                        This Neovim configuration is designed for developers who want a powerful, efficient, and beautiful coding environment. It combines the best of modern Neovim plugins with custom-built functionality to create a seamless development experience.
+                    </p>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mb-4 markdown-heading-3">
+                        Key Philosophy
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list">
+                            <span class="markdown-strong">Minimalism with Power</span>: Clean interface with powerful features
+                        </li>
+                        <li class="markdown-list">
+                            <span class="markdown-strong">Developer-Centric</span>: Built by developers, for developers
+                        </li>
+                        <li class="markdown-list">
+                            <span class="markdown-strong">Extensible</span>: Easy to customize and extend
+                        </li>
+                        <li class="markdown-list">
+                            <span class="markdown-strong">Performance</span>: Fast startup and responsive editing
+                        </li>
+                    </ul>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="features" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        ✨ Features
+                    </h2>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mb-4 markdown-heading-3">
+                        🔍 <span class="markdown-strong">Smart Navigation & Search</span>
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list">Fuzzy file finding with Telescope</li>
+                        <li class="markdown-list">Project-wide text search</li>
+                        <li class="markdown-list">Git integration with Fugitive</li>
+                        <li class="markdown-list">Buffer management system</li>
+                        <li class="markdown-list">Markdown link navigation</li>
+                    </ul>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        💻 <span class="markdown-strong">Development Tools</span>
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list">Full LSP support with auto-completion</li>
+                        <li class="markdown-list">Syntax highlighting with TreeSitter</li>
+                        <li class="markdown-list">Custom compile mode for multiple languages</li>
+                        <li class="markdown-list">Git workflow integration</li>
+                        <li class="markdown-list">Auto-formatting on save</li>
+                    </ul>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        📝 <span class="markdown-strong">Productivity Features</span>
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list">TODO management system</li>
+                        <li class="markdown-list">Floating todo buffer</li>
+                        <li class="markdown-list">Snippet management with LuaSnip</li>
+                        <li class="markdown-list">Undo tree visualization</li>
+                        <li class="markdown-list">Org-mode support</li>
+                    </ul>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        🎨 <span class="markdown-strong">Visual Enhancements</span>
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list">Tokyo Night theme</li>
+                        <li class="markdown-list">Icons and beautiful UI</li>
+                        <li class="markdown-list">Custom syntax highlighting</li>
+                        <li class="markdown-list">Configurable layouts</li>
+                    </ul>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="prerequisites" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        📋 Prerequisites
+                    </h2>
+                    <p class="text-lg leading-relaxed mb-6 markdown-spell">
+                        Before installing this configuration, ensure you have:
+                    </p>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mb-4 markdown-heading-3">
+                        Required Software
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list"><span class="markdown-strong">Neovim</span> &gt;= 0.8.0</li>
+                        <li class="markdown-list"><span class="markdown-strong">Git</span> (for plugin management)</li>
+                        <li class="markdown-list"><span class="markdown-strong">Node.js</span> &amp; <span class="markdown-strong">npm</span> (for LSP servers)</li>
+                        <li class="markdown-list"><span class="markdown-strong">Python 3</span> with pip</li>
+                        <li class="markdown-list"><span class="markdown-strong">GCC/Clang</span> (for TreeSitter)</li>
+                    </ul>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        Recommended Tools
+                    </h3>
+                    <pre><code class="language-bash">
+<span class="comment"># Language servers and formatters</span>
+<span class="function">npm</span> <span class="variable-parameter">install</span> <span class="variable-parameter">-g</span> <span class="variable-parameter">pyright</span> <span class="variable-parameter">typescript</span> <span class="variable-parameter">typescript-language-server</span>
+<span class="function">pip</span> <span class="variable-parameter">install</span> <span class="variable-parameter">black</span>
+<span class="function">cargo</span> <span class="variable-parameter">install</span> <span class="variable-parameter">stylua</span>  <span class="comment"># For Lua formatting</span>
+                    </code></pre>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        System Dependencies
+                    </h3>
+                    <pre><code class="language-bash">
+<span class="comment"># Ubuntu/Debian</span>
+<span class="function">sudo</span> <span class="variable-parameter">apt</span> <span class="variable-parameter">install</span> <span class="variable-parameter">build-essential</span> <span class="variable-parameter">curl</span> <span class="variable-parameter">git</span> <span class="variable-parameter">nodejs</span> <span class="variable-parameter">npm</span> <span class="variable-parameter">python3-pip</span>
+
+<span class="comment"># macOS</span>
+<span class="function">brew</span> <span class="variable-parameter">install</span> <span class="variable-parameter">neovim</span> <span class="variable-parameter">node</span> <span class="variable-parameter">python3</span> <span class="variable-parameter">git</span>
+
+<span class="comment"># Arch Linux</span>
+<span class="function">sudo</span> <span class="variable-parameter">pacman</span> <span class="variable-parameter">-S</span> <span class="variable-parameter">neovim</span> <span class="variable-parameter">nodejs</span> <span class="variable-parameter">npm</span> <span class="variable-parameter">python-pip</span> <span class="variable-parameter">git</span> <span class="variable-parameter">base-devel</span>
+                    </code></pre>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="installation" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🔧 Installation
+                    </h2>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mb-4 markdown-heading-3">
+                        Quick Setup
+                    </h3>
+                    <pre><code class="language-bash">
+<span class="comment"># 1. Backup existing configuration</span>
+<span class="function">mv</span> <span class="variable-parameter">~/.config/nvim</span> <span class="variable-parameter">~/.config/nvim.backup</span>
+
+<span class="comment"># 2. Clone this repository</span>
+<span class="function">git</span> <span class="variable-parameter">clone</span> <span class="variable-parameter">https://github.com/yourusername/nvim-config.git</span> <span class="variable-parameter">~/.config/nvim</span>
+
+<span class="comment"># 3. Start Neovim and install plugins</span>
+<span class="function">nvim</span>
+<span class="comment"># Wait for Packer to install plugins automatically</span>
+<span class="punctuation-delimiter">:</span><span class="preproc">PackerSync</span>
+
+<span class="comment"># 4. Install LSP servers</span>
+<span class="punctuation-delimiter">:</span><span class="preproc">Mason</span>
+<span class="comment"># Install desired language servers from the Mason interface</span>
+                    </code></pre>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        Manual Installation Steps
+                    </h3>
+                    <ol class="list-decimal list-inside space-y-4 text-lg">
+                        <li class="markdown-list">
+                            <span class="markdown-strong">Clone the Repository</span>
+                            <pre><code class="language-bash">
+<span class="function">git</span> <span class="variable-parameter">clone</span> <span class="variable-parameter">https://github.com/yourusername/nvim-config.git</span> <span class="variable-parameter">~/.config/nvim</span>
+                            </code></pre>
+                        </li>
+                        <li class="markdown-list">
+                            <span class="markdown-strong">First Launch</span>
+                            <pre><code class="language-bash">
+<span class="function">nvim</span>
+                            </code></pre>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li class="markdown-list">Packer will automatically install on first run</li>
+                                <li class="markdown-list">Plugins will be downloaded and compiled</li>
+                            </ul>
+                        </li>
+                        <li class="markdown-list">
+                            <span class="markdown-strong">Install Language Servers</span>
+                            <pre><code class="language-vim">
+<span class="punctuation-delimiter">:</span><span class="preproc">Mason</span>
+                            </code></pre>
+                            <p class="mt-2 markdown-spell">Install these recommended servers:</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li class="markdown-list"><code class="markdown-raw-inline">lua_ls</code> (Lua)</li>
+                                <li class="markdown-list"><code class="markdown-raw-inline">pyright</code> (Python)</li>
+                                <li class="markdown-list"><code class="markdown-raw-inline">ts_ls</code> (TypeScript/JavaScript)</li>
+                                <li class="markdown-list"><code class="markdown-raw-inline">bashls</code> (Bash)</li>
+                                <li class="markdown-list"><code class="markdown-raw-inline">clangd</code> (C/C++)</li>
+                            </ul>
+                        </li>
+                        <li class="markdown-list">
+                            <span class="markdown-strong">Verify Installation</span>
+                            <pre><code class="language-vim">
+<span class="punctuation-delimiter">:</span><span class="keyword">checkhealth</span>
+                            </code></pre>
+                        </li>
+                    </ol>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="configuration-structure" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🗂️ Configuration Structure
+                    </h2>
+                    <pre><code class="language-text">
+~/.config/nvim/
+├── init.lua                   # Entry point
+├── lua/
+│   └── csode/
+│       ├── autocmd.lua        # Auto commands
+│       ├── colorscheme.lua    # Theme configuration
+│       ├── keymap.lua         # Key mappings
+│       ├── local.lua          # Local plugin loader
+│       ├── options.lua        # Neovim options
+│       ├── plugins.lua        # Plugin definitions
+│       ├── local_plugins/     # Custom plugins
+│       │   ├── nvim_compile.lua # Compile mode
+│       │   ├── markdown_link_nav.lua # Markdown navigation
+│       │   ├── todo.lua         # TODO management
+│       │   └── todo_buffer.lua  # Floating TODO buffer
+│       └── plugin_config/     # Plugin configurations
+│           ├── buffer-manager.lua
+│           ├── coq.lua
+│           ├── conform.lua
+│           ├── fugitive.lua
+│           ├── lsp-zero.lua
+│           ├── luasnip.lua
+│           ├── telescope.lua
+│           └── treesitter.lua
+└── lua/snippets/              # Custom snippets
+    └── markdown.lua
+                    </code></pre>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        Configuration Breakdown
+                    </h3>
+
+                    <h4 class="text-xl sm:text-2xl font-bold text-quaternary mb-3 markdown-heading-4">
+                        <span class="markdown-strong">init.lua</span> - Entry Point
+                    </h4>
+                    <p class="text-lg leading-relaxed mb-4 markdown-spell">
+                        The main configuration file that loads all modules:
+                    </p>
+                    <pre><code class="language-lua">
+<span class="variable"><span class="function">require</span></span><span class="punctuation-bracket">(</span><span class="string">&quot;csode.options&quot;</span><span class="punctuation-bracket">)</span>      <span class="comment">-- Neovim settings</span>
+<span class="variable"><span class="function">require</span></span><span class="punctuation-bracket">(</span><span class="string">&quot;csode.keymap&quot;</span><span class="punctuation-bracket">)</span>       <span class="comment">-- Key bindings</span>
+<span class="variable"><span class="function">require</span></span><span class="punctuation-bracket">(</span><span class="string">&quot;csode.plugins&quot;</span><span class="punctuation-bracket">)</span>     <span class="comment">-- Plugin management</span>
+<span class="variable"><span class="function">require</span></span><span class="punctuation-bracket">(</span><span class="string">&quot;csode.local&quot;</span><span class="punctuation-bracket">)</span><span class="punctuation-delimiter">.</span><span class="variable-member"><span class="function">load</span></span><span class="punctuation-bracket">(</span><span class="punctuation-bracket">)</span> <span class="comment">-- Custom plugins</span>
+<span class="variable"><span class="function">require</span></span><span class="punctuation-bracket">(</span><span class="string">&quot;csode.colorscheme&quot;</span><span class="punctuation-bracket">)</span>  <span class="comment">-- Theme</span>
+<span class="variable"><span class="function">require</span></span><span class="punctuation-bracket">(</span><span class="string">&quot;csode.autocmd&quot;</span><span class="punctuation-bracket">)</span>      <span class="comment">-- Auto commands</span>
+                    </code></pre>
+
+                    <h4 class="text-xl sm:text-2xl font-bold text-quaternary mt-8 mb-3 markdown-heading-4">
+                        <span class="markdown-strong">Core Modules</span>
+                    </h4>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list"><span class="markdown-strong">options.lua</span>: Core Neovim settings (tabs, search, UI)</li>
+                        <li class="markdown-list"><span class="markdown-strong">keymap.lua</span>: All key mappings and shortcuts</li>
+                        <li class="markdown-list"><span class="markdown-strong">plugins.lua</span>: Plugin definitions using Packer</li>
+                        <li class="markdown-list"><span class="markdown-strong">colorscheme.lua</span>: Theme configuration</li>
+                    </ul>
+
+                    <h4 class="text-xl sm:text-2xl font-bold text-quaternary mt-8 mb-3 markdown-heading-4">
+                        <span class="markdown-strong">Custom Plugins Directory</span>
+                    </h4>
+                    <p class="text-lg leading-relaxed mb-4 markdown-spell">
+                        All custom-built functionality lives in <code class="markdown-raw-inline">local_plugins/</code>:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-lg">
+                        <li class="markdown-list"><span class="markdown-strong">nvim_compile.lua</span>: Advanced compilation system</li>
+                        <li class="markdown-list"><span class="markdown-strong">todo.lua</span>: TODO comment management</li>
+                        <li class="markdown-list"><span class="markdown-strong">todo_buffer.lua</span>: Floating TODO file interface</li>
+                        <li class="markdown-list"><span class="markdown-strong">markdown_link_nav.lua</span>: Navigate between markdown files</li>
+                    </ul>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="keybindings-reference" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        ⌨️ Keybindings Reference
+                    </h2>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mb-4 markdown-heading-3">
+                        🔧 <span class="markdown-strong">Leader Key</span>: <code class="markdown-raw-inline">&lt;Space&gt;</code>
+                    </h3>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-tertiary mt-8 mb-4 markdown-heading-3">
+                        📁 <span class="markdown-strong">File Navigation</span>
+                    </h3>
+                    <div class="overflow-x-auto rounded-lg shadow-md">
+                        <table class="min-w-full bg-gray-700 rounded-lg">
+                            <thead>
+                                <tr>
+                                    <th class="py-3 px-4 text-left text-sm font-semibold text-primary uppercase tracking-wider border-b border-gray-600 rounded-tl-lg">Key</th>
+                                    <th class="py-3 px-4 text-left text-sm font-semibold text-primary uppercase tracking-wider border-b border-gray-600">Action</th>
+                                    <th class="py-3 px-4 text-left text-sm font-semibold text-primary uppercase tracking-wider border-b border-gray-600 rounded-tr-lg">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="plugin-ecosystem" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🔌 Plugin Ecosystem
+                    </h2>
+                    <p class="text-lg leading-relaxed markdown-spell">
+                        Details about the various plugins used in this Neovim configuration will go here.
+                    </p>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="custom-plugins" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🛠️ Custom Plugins
+                    </h2>
+                    <p class="text-lg leading-relaxed markdown-spell">
+                        Information about custom-developed plugins and their functionalities will be detailed here.
+                    </p>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="customization-guide" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🎨 Customization Guide
+                    </h2>
+                    <p class="text-lg leading-relaxed markdown-spell">
+                        A guide on how to customize this Neovim setup to fit your personal preferences and workflow.
+                    </p>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="troubleshooting" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🐛 Troubleshooting
+                    </h2>
+                    <p class="text-lg leading-relaxed markdown-spell">
+                        Common issues and their solutions for this Neovim configuration.
+                    </p>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="advanced-usage" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        📖 Advanced Usage
+                    </h2>
+                    <p class="text-lg leading-relaxed markdown-spell">
+                        Tips and tricks for advanced users to get the most out of this Neovim setup.
+                    </p>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+                <section id="contributing" class="mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-secondary mb-6 markdown-heading-2">
+                        🤝 Contributing
+                    </h2>
+                    <p class="text-lg leading-relaxed markdown-spell">
+                        Guidelines for contributing to this Neovim configuration project.
+                    </p>
+                    <hr class="border-t-2 border-accent-orange my-8 markdown-punctuation-special">
+                </section>
+
+            </main>
+
+            <footer class="text-center mt-12 pt-8 border-t border-gray-700 text-gray-500 text-sm">
+                <p>&copy; 2025 Neovim Setup. All rights reserved.</p>
+                <p>Built with ❤️ and Neovim.</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
+
