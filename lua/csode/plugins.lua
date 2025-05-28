@@ -51,14 +51,6 @@ return packer.startup(function(use)
 		end,
 	})
 	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "nvim-tree/nvim-web-devicons", opt = true },
-		config = function()
-			require("csode.plugin_config.lualine")
-		end,
-	})
-	-- packer
-	use({
 		"folke/todo-comments.nvim",
 		requires = "nvim-lua/plenary.nvim",
 		config = function()
