@@ -35,8 +35,8 @@ vim.o.cursorline = true
 vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
-vim.api.nvim_create_autocmd("VimEnter", {
-	callback = function()
-		vim.cmd("COQnow")
-	end,
-})
+-- vim.api.nvim_create_autocmd("VimEnter", {
+-- 	callback = function()
+-- 		vim.cmd("COQnow")
+-- 	end,
+-- })
