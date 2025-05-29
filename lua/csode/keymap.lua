@@ -67,14 +67,14 @@ vim.api.nvim_set_keymap(
     { noremap = true, silent = true }
 )
 
--- Local mapping
+-- Local Plugins mapping
 vim.keymap.set("n", "<leader>cc", function()
     vim.cmd("CompileMode")
 end, { noremap = true, silent = true, desc = "Enter compile mode" })
 
 vim.keymap.set("n", "<leader>td", function()
     vim.cmd("Td")
-end, { noremap = true, silent = true, desc = "Todo" })
+end, { noremap = true, silent = true, desc = "Todo mode" })
 
 vim.keymap.set("n", "<leader>mm", function()
     vim.cmd("FollowMarkdownLink")
@@ -86,3 +86,80 @@ vim.keymap.set("n", "<leader>?", function()
         show_plug = false,
     })
 end, { desc = "Show all keybindings" })
+-- Toggle task completion
+vim.keymap.set("n", "<leader>tt", function()
+  local line = vim.api.nvim_get_current_line()
+  if line:match("%[ %]") then
+    line = line:gsub("%[ %]", "[x]")
+  elseif line:match("%[x%]") then
+    line = line:gsub("%[x%]", "[ ]")
+  else
+    line = "- [ ] " .. line
+  end
+  vim.api.nvim_set_current_line(line)
+end, { desc = "Toggle todo checkbox" })
+-- Move completed task to # Completed
+vim.keymap.set("n", "<C-e>", function()
+  local line_num = vim.fn.line(".")
+  local line = vim.fn.getline(line_num)
+
+  -- Mark as completed
+  if not line:match("%[x%]") then
+    line = line:gsub("%[ %]", "[x]")
+    if not line:match("%[x%]") then
+      line = "- [x] " .. line
+    end
+  end
+
+  -- Remove current line
+  vim.fn.setline(line_num, "")
+  vim.cmd(line_num .. "delete")
+
+  -- Find "# Completed"
+  local target_line = -1
+  local total = vim.fn.line("$")
+  for i = 1, total do
+    if vim.fn.getline(i):match("^# Completed") then
+      target_line = i
+      break
+    end
+  end
+
+  if target_line > 0 then
+    vim.fn.append(target_line, line)
+  else
+    vim.fn.append(total, { "# Completed", line })
+  end
+end, { desc = "Complete and move task to # Completed" })
+
+-- Move task from # Completed back to # Todo
+vim.keymap.set("n", "<C-r>", function()
+  local line_num = vim.fn.line(".")
+  local line = vim.fn.getline(line_num)
+
+  if not line:match("%[x%]") then return end
+
+  -- Mark as not completed
+  line = line:gsub("%[x%]", "[ ]")
+
+  -- Remove current line
+  vim.fn.setline(line_num, "")
+  vim.cmd(line_num .. "delete")
+
+  -- Find "# Todo"
+  local target_line = -1
+  local total = vim.fn.line("$")
+  for i = 1, total do
+    if vim.fn.getline(i):match("^# Todo") then
+      target_line = i
+      break
+    end
+  end
+
+  if target_line > 0 then
+    vim.fn.append(target_line, line)
+  else
+    vim.fn.append(0, { "# Todo", line })
+  end
+end, { desc = "Restore task to # Todo" })
+

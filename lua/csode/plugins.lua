@@ -153,7 +153,11 @@ return packer.startup(function(use)
 		end,
 	})
 
-	-- Org Bullets (Prettier headlines)
+    use {
+        'bullets-vim/bullets.vim',
+        ft = { 'markdown', 'text' }
+    }
+
 	use({
 		"akinsho/org-bullets.nvim",
 		ft = "org",
