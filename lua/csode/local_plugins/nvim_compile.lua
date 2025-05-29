@@ -1,5 +1,3 @@
--- Minimal compile mode for Neovim with error line highlighting and navigation.
-
 local M = {}
 
 local compile_history = {}
