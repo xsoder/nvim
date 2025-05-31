@@ -1,4 +1,4 @@
-# 🚀 Neovim Setup
+# 🚀stdio Neovim Setup
 
 <div align="center">
   <img src="./logo.png" alt="Neovim Config Logo" width="200"/>

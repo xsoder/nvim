@@ -30,7 +30,7 @@ vim.opt.colorcolumn = ""
 vim.opt.showmode = false
 vim.opt.showcmd = false
 
-vim.o.cursorline = true
+-- vim.o.cursorline = true
 
 vim.opt.wrap = true
 vim.opt.linebreak = true
