@@ -68,10 +68,6 @@ vim.api.nvim_set_keymap(
 )
 
 -- Local Plugins mapping
-vim.keymap.set("n", "<leader>cc", function()
-    vim.cmd("CompileMode")
-end, { noremap = true, silent = true, desc = "Enter compile mode" })
-
 vim.keymap.set("n", "<leader>td", function()
     vim.cmd("Td")
 end, { noremap = true, silent = true, desc = "Todo mode" })
@@ -162,4 +158,7 @@ vim.keymap.set("n", "<C-r>", function()
     vim.fn.append(0, { "# Todo", line })
   end
 end, { desc = "Restore task to # Todo" })
+vim.keymap.set('n', '<leader>cc', function()
+  vim.cmd('belowright Compile')
+end, { desc = 'Run Compile with belowright split' })
 

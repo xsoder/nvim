@@ -27,9 +27,16 @@ require("buffer-manager").setup({
     session_dir = vim.fn.stdpath("data") .. "/buffer-manager-sessions",
     session_file = "session.json",
     indicator_icon = "󱡅",
-
-    vim.keymap.set("n", "<leader>sl", function()
-        require("buffer-manager.session").load_session()
-    end, { desc = "BufferManager: Restore session" })
-  }
+    }
 })
+-- Session loading mapping 
+vim.keymap.set("n", "<leader>sl", function()
+    require("buffer-manager.session").load_session()
+end, { desc = "BufferManager: Restore session" })
+
+-- Buffer switching mappings 
+for i = 1, 9 do
+    vim.keymap.set("n", string.format("<leader>%d", i), function()
+        require("buffer-manager.pin").jump_to_pin(i)
+    end, { desc = string.format("Go to pinned buffer #%d", i) })
+end

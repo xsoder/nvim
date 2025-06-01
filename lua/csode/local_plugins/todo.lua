@@ -20,12 +20,10 @@ end
 local function calculate_position(position)
     local posx, posy = 0.5, 0.5
 
-    -- Custom position
     if type(position) == "table" then
         posx, posy = position[1], position[2]
     end
 
-    -- Keyword position
     if position == "center" then
         posx, posy = 0.5, 0.5
     elseif position == "topleft" then
@@ -67,13 +65,14 @@ local function open_floating_file(opts)
 
     local expanded_path = expand_path(opts.target_file)
 
+    -- Create the file if it doesn't exist
     if vim.fn.filereadable(expanded_path) == 0 then
-        vim.notify("todo file does not exist at directory: " .. expanded_path, vim.log.levels.ERROR)
-        return
+        local dir = vim.fn.fnamemodify(expanded_path, ":h")
+        vim.fn.mkdir(dir, "p")
+        vim.fn.writefile({}, expanded_path)
     end
 
     local buf = vim.fn.bufnr(expanded_path, true)
-
     if buf == -1 then
         buf = vim.api.nvim_create_buf(false, false)
         vim.api.nvim_buf_set_name(buf, expanded_path)
@@ -103,6 +102,13 @@ local function setup_user_commands(opts)
     vim.api.nvim_create_user_command("Td", function()
         open_floating_file(opts)
     end, {})
+
+    vim.api.nvim_create_user_command("MakeNote", function()
+        local local_opts = vim.deepcopy(opts)
+        local cwd = vim.fn.getcwd()
+        local_opts.target_file = cwd .. "/todo.md"
+        open_floating_file(local_opts)
+    end, {})
 end
 
 M.setup = function(opts)
@@ -110,3 +116,4 @@ M.setup = function(opts)
 end
 
 return M
+
