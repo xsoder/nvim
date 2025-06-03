@@ -37,6 +37,7 @@ packer.init({
 return packer.startup(function(use)
     use("wbthomason/packer.nvim")
     use("rose-pine/neovim")
+    use {'thimc/gruber-darker.nvim'}
     use({
         "mbbill/undotree",
         config = function()
